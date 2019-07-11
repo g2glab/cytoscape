@@ -1,0 +1,48 @@
+body {
+  margin: 0;
+  padding: 0;
+  font-family: "Montserrat", sans-serif;
+  background-color: #020f13;
+}
+
+.input_wrapper {
+  width: 100vw;
+  height: 10vh;
+  background-color: rgba(46, 159, 179, 0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.input_wrapper label {
+  color: white;
+  display: inline-block;
+  margin-right: 10px;
+}
+
+.input_wrapper input[type="text"] {
+  width: 40vw;
+  height: 30px;
+  border-radius: 10px;
+  border: none;
+  background-color: rgba(255, 255, 255, 0.8);
+  font-size: 15px;
+  padding-left: 10px;
+  font-family: "Montserrat", sans-serif;
+}
+
+.input_wrapper input[type="text"]:focus {
+  outline: 0;
+}
+
+.input_wrapper input[type="text"]:first-of-type {
+  margin-right: 20px;
+}
+
+#cy {
+  height: 90vh;
+  width: 100vw;
+  margin: 0 auto;
+  /* border: 1px solid rgba(0, 0, 0, .1);
+	border-radius: 10px;
+	 */
+}

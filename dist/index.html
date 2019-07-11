@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>X2_TEST</title>
+    <link
+      href="https://fonts.googleapis.com/css?family=Montserrat&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="https://cdnjs.cloudflare.com/ajax/libs/qtip2/3.0.3/jquery.qtip.min.css"
+    />
+    <link rel="stylesheet" type="text/css" href="css/index.css" />
+    <script
+      src="https://code.jquery.com/jquery-3.4.1.min.js"
+      integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+      crossorigin="anonymous"
+    ></script>
+    <script src="js/cytoscape.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qtip2/3.0.3/jquery.qtip.min.js"></script>
+    <script src="js/cytoscape-qtip.js"></script>
+  </head>
+  <body>
+    <div id="cy"></div>
+    <div class="input_wrapper">
+      <form action="" method="post">
+        <label for="from">from</label>
+        <input
+          type="text"
+          name="from"
+          id=""
+          placeholder="Tokyo"
+          onkeydown="enter();"
+        />
+        <label for="to">to</label>
+        <input
+          type="text"
+          name="to"
+          id=""
+          placeholder="Bangkok"
+          onkeydown="enter();"
+        />
+      </form>
+    </div>
+    <!-- <script src="js/index.js"></script> -->
+    <script>
+      $(function() {
+        // 初期表示
+        search("Tokyo", "Bangkok");
+      });
+      const enter = () => {
+        if (window.event.keyCode == 13) {
+          let from = $('input[name="from"]').val();
+          let to = $('input[name="to"]').val();
+          search(from, to);
+        }
+      };
+
+      const search = (from, to) => {
+        $.ajax({
+          url: `http://3.113.204.231:3000/graph/`,
+          type: "GET"
+        }).done(response => {
+          // response = JSON.parse(response)
+          response.nodes = response.nodes.map((node, i) => {
+            let obj = {};
+            obj["data"] = node;
+            obj["position"] = {};
+            obj.position["x"] = Number(node.properties.longitude);
+            obj.position["y"] = -Number(node.properties.latitude);
+            return obj;
+          });
+          response.edges = response.edges.map(edge => {
+            let obj = {};
+            obj["data"] = edge;
+            obj.data.source = Number(edge.from);
+            obj.data.target = Number(edge.to);
+            return obj;
+          });
+          //内容要素を表現するCSS
+          var style = [
+            //セレクターで拾いた内容要素が 指定したCSSを適用する
+            //ノードの中で、label属性は「Peson」のノードが青色で表示し、文字はname属性を表示する
+            {
+              selector: "node",
+              css: {
+                "background-color": "#ffffff",
+                // "background-image": "./assets/img/airplane.svg",
+                // "background-fit": "contain",
+                content: "data(properties.iata)",
+                color: "#ffffff",
+                "font-size": 5,
+                width: 3,
+                height: 3
+              }
+            },
+            {
+              selector: "node.clicked",
+              css: {
+                "background-color": "red"
+              }
+            },
+            //ノードの中で、label属性は「Movie」のノードがオレンジ色で表示し、文字はtitle属性を表示する
+            {
+              selector: "edge",
+              css: {
+                content: "data(properties.airline)",
+                "text-opacity": 0,
+                "curve-style": "bezier",
+                "font-size": 3,
+                width: 0.5,
+                "line-color": "#2e9fb3",
+                color: "#2e9fb3"
+              }
+            },
+            {
+              selector: "edge.highlighted",
+              css: {
+                "line-color": "red"
+              }
+            },
+            {
+              selector: "edge.hover",
+              css: {
+                "text-opacity": "1"
+              }
+            }
+          ];
+
+          //レイアウト設定
+          var layout = {
+            name: "preset"
+          };
+
+          // Cytoscapeオブジェクト初期化。
+          var cy = cytoscape({
+            // containerがHTML内の「cy」DOM要素に指定
+            container: document.getElementById("cy"),
+            elements: response,
+            style: style,
+            layout: layout
+          });
+
+          cy.on("click", "node", e => {
+            let id = e.target.id();
+            var node_clicked = cy.nodes(`[id="${id}"]`);
+            var outgoing = cy.edges("[source='" + id + "']");
+            outgoing.addClass("highlighted");
+            node_clicked.addClass("clicked");
+          });
+
+          cy.zoom({
+            level: 4.0, // the zoom level
+            position: { x: 0, y: 0 }
+          });
+
+          cy.elements().qtip({
+            content: function() {
+              return this._private.data.properties.airline;
+            },
+            position: {
+              my: "top center",
+              at: "bottom center"
+            },
+            style: {
+              classes: "qtip-bootstrap",
+              tip: {
+                width: 16,
+                height: 8
+              }
+            }
+          });
+        });
+      };
+    </script>
+  </body>
+</html>
