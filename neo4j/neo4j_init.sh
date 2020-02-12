@@ -15,3 +15,4 @@ IFS=$'\n\t'
 #else
 #    echo "The import has already been made."
 #fi
+kill 1
