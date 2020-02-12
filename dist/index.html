@@ -62,11 +62,11 @@
 
       const search = (from, to) => {
         $.ajax({
-          url: `http://3.113.204.231:3000/graph/?node_props=city:${from}&node_props=city:${to}`,
+          url: `http://localhost:3000/edge_match/?node_props=city:${from}&node_props=city:${to}`,
           type: "GET"
         }).done(response => {
           // response = JSON.parse(response)
-          response.nodes = response.nodes.map((node, i) => {
+          response.nodes = response.pg.nodes.map((node, i) => {
             let obj = {};
             obj["data"] = node;
             obj["position"] = {};
@@ -74,7 +74,7 @@
             obj.position["y"] = -Number(node.properties.latitude);
             return obj;
           });
-          response.edges = response.edges.map(edge => {
+          response.edges = response.pg.edges.map(edge => {
             let obj = {};
             obj["data"] = edge;
             obj.data.source = Number(edge.from);

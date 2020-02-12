@@ -1,0 +1,38 @@
+version: '2.2'
+services:
+  neo4j:
+    image: neo4j:3.5.5
+    ports:
+     - "7474"
+     - "7687"
+    user: 1000:1000
+    restart: always
+    environment:
+     - NEO4J_AUTH=neo4j/neo4jtest
+    volumes:
+     - ./neo4j:/neo4j
+     - ./neo4j/logs:/logs
+     #- ./neo4j/conf:/var/lib/neo4j/conf
+    networks:
+     - server
+  frontend:
+    ports:
+     - "8080:8080"
+    image: python:2.7-alpine
+    volumes:
+     - ./dist:/dist
+    working_dir: /dist
+    command: python -m SimpleHTTPServer 8080
+    restart: always
+  x2:
+    ports:
+     - "3000:3000"
+    image: g2glab/x2
+    volumes:
+     - ./config:/home/node/app/config
+    links:
+     - neo4j:neo4j
+    networks:
+     - server
+networks:
+  server:
