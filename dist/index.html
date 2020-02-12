@@ -62,7 +62,7 @@
 
       const search = (from, to) => {
         $.ajax({
-          url: `http://localhost:3000/graph/?node_props=city:${from}&node_props=city:${to}`,
+          url: `http://localhost:3000/node_match/?node_props=city:${from}&node_props=city:${to}`,
           type: "GET"
         }).done(response => {
           // response = JSON.parse(response)

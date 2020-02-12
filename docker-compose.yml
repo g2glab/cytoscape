@@ -1,9 +1,7 @@
 version: '2.2'
 services:
-rks:
   neo4j:
     image: neo4j:3.5
-#    image: neo4j:3.1
     ports:
      - "7474"
      - "7687"
@@ -15,8 +13,6 @@ rks:
      - ./neo4j:/neo4j
      - ./neo4j/logs:/var/lib/neo4j/logs
      - ./neo4j/conf:/var/lib/neo4j/conf
-#     - ./neo4j/graph.db:/var/lib/neo4j/data/databases/graph.db
-#    command: neo4j
     networks:
      - server
   frontend:
@@ -24,19 +20,17 @@ rks:
      - "8080:8080"
     image: python:2.7-slim
     volumes:
-     - ./frontend:/frontend
-    working_dir: /frontend
-    command: python /frontend/simplehttp.py 8080 user:pass
+     - ./dist:/dist
+    working_dir: /dist
+    command: python -m SimpleHTTPServer 8080
     restart: always
   x2:
     ports:
-     - "3000"
+     - "3000:3000"
     image: g2glab/x2
-#    build:
-#      context: ./x2
     links:
      - neo4j:neo4j
-#      context: http://github.com/g2glab/x2.git
     networks:
      - server
-
+networks:
+  server:
