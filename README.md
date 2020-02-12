@@ -1,5 +1,7 @@
 # cytoscape
 
+A demo app for X2.
+
 ```bash
 $ git clone https://github.com/g2glab/cytoscape
 $ cd cytoscape
