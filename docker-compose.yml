@@ -1,25 +1,24 @@
 version: '2.2'
 services:
   neo4j:
-    image: neo4j:3.5
+    image: neo4j:3.5.5
     ports:
      - "7474"
      - "7687"
     user: 1000:1000
     restart: always
     environment:
-     #- EXTENSION_SCRIPT=/neo4j/neo4j-init.sh
      - NEO4J_AUTH=neo4j/neo4jtest
     volumes:
      - ./neo4j:/neo4j
      - ./neo4j/logs:/logs
-     - ./neo4j/conf:/var/lib/neo4j/conf
+     #- ./neo4j/conf:/var/lib/neo4j/conf
     networks:
      - server
   frontend:
     ports:
      - "8080:8080"
-    image: python:2.7-slim
+    image: python:2.7-alpine
     volumes:
      - ./dist:/dist
     working_dir: /dist
