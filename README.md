@@ -11,3 +11,5 @@ $ docker-compose exec neo4j bash /neo4j/neo4j_init.sh
 ```
 
 Access to http://localhost:8080/
+
+If neo4j container does not work well, please try `chown` for `neo4j/logs` folder.
