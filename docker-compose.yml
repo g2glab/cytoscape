@@ -1,6 +1,6 @@
 version: '2.1'
 services:
-  neo4j:
+  neo4j
     image: neo4j:4.1
     ports:
      - "7474"

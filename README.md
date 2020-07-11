@@ -10,3 +10,5 @@ $ docker-compose up
 ```
 
 Access to http://localhost:8080/
+
+If neo4j container does not work well, please try `chown` for `neo4j/logs` folder.
