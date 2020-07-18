@@ -35,5 +35,6 @@ services:
      - neo4j:neo4j
     networks:
      - server
+    restart: always
 networks:
   server:
