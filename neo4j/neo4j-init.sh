@@ -13,7 +13,7 @@ if [ ! -f /tmp/neo4j-import-done.flag ]; then
     /var/lib/neo4j/bin/neo4j-import --skip-bad-relationships --into /var/lib/neo4j/data/databases/graph.db --delimiter '\t' --nodes /neo4j/openflights.neo.nodes --relationships /neo4j/openflights.neo.edges
     touch /tmp/neo4j-import-done.flag
 else
-#    echo "The import has already been made."
+    echo "The import has already been made."
 fi
 #kill 1
 #kill $(ps aux | grep '[n]eo4j' | awk '{print $2}')
